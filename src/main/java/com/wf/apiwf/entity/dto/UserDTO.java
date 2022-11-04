@@ -1,0 +1,21 @@
+package com.wf.apiwf.entity.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wf.apiwf.security.SystemUserRoles;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UserDTO {
+
+    private String name;
+    private String username;
+    private String systemUserRoles;
+
+}
