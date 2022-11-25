@@ -37,11 +37,12 @@ public class ProductService implements IService<Product> {
     }
 
     @Override
-    public void delete(Long id) {
+    public ResponseEntity<?> delete(Long id) {
         if(productRepository.findById(id).isPresent()){
             productRepository.deleteById(id);
             log.info("Produto deletado");
         }
+        return null;
     }
 
     @Override

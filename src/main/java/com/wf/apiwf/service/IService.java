@@ -11,7 +11,7 @@ public  interface IService<T>{
 
     public ResponseEntity<?> save(T t) throws ResourceNotFoundException;
 
-    public void delete(Long id);
+    public ResponseEntity<?> delete(Long id);
 
     public void update(T t);
 

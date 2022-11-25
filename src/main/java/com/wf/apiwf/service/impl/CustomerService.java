@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService implements IService<Customer> {
@@ -33,9 +32,13 @@ public class CustomerService implements IService<Customer> {
     public ResponseEntity<?> getAll() {
         List<CustomerDTO> customerDTOList = new ArrayList<>();
         List<Customer> customerList = customerRepository.findAll();
-        if (customerList.isEmpty()) new ResponseEntity<>("No customers registered", HttpStatus.NOT_FOUND);
-        customerList.forEach(c -> customerDTOList.add(mapper.convertValue(c, CustomerDTO.class)));
-        return ResponseEntity.ok(customerDTOList);
+        customerList.forEach(
+                c -> customerDTOList.add(
+                        mapper.convertValue(c, CustomerDTO.class)
+                ));
+        return customerList.isEmpty() ?
+                new ResponseEntity<>("No customers registered", HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(customerDTOList);
     }
 
     @Override
@@ -48,22 +51,21 @@ public class CustomerService implements IService<Customer> {
     @Override
     public ResponseEntity<?> save(Customer customer) throws ResourceNotFoundException {
         log.info("customer: " + customer.getCompanyName() + " saved successfully");
-        Customer c;
-        try {
-            c = customerRepository.save(customer);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Error, customer not registered");
-        }
-        return ResponseEntity.ok(c);
+        Customer saved;
+
+        try { saved = customerRepository.save(customer); }
+        catch (Exception e) { throw new ResourceNotFoundException("Error, customer not registered"); }
+        return ResponseEntity.ok(saved);
     }
 
     @Override
-    public void delete(Long id) {
-        if (customerRepository.findById(id).isPresent()) {
-            Optional<Customer> customer = customerRepository.findById(id);
-            customerRepository.deleteById(id);
-            log.info("Customer deleted successfully!");
+    public ResponseEntity<?> delete(Long id) {
+        if (customerRepository.findById(id).isEmpty()) {
+            return new ResponseEntity<>("Order not found for deleting", HttpStatus.BAD_REQUEST);
         }
+        log.info("Customer deleted successfully!");
+        customerRepository.deleteById(id);
+        return new ResponseEntity<>("Saved successfully", HttpStatus.OK);
     }
 
     @Override

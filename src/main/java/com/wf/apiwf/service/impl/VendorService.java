@@ -39,12 +39,13 @@ public class VendorService implements IService<Vendor> {
     }
 
     @Override
-    public void delete(Long id) {
+    public ResponseEntity<?> delete(Long id) {
         if (vendorRepository.findById(id).isPresent()) {
             vendorRepository.deleteById(id);
             log.info("Vendedor Deletado com sucesso!");
         }
 
+        return null;
     }
 
     @Override
