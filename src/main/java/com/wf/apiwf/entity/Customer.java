@@ -1,11 +1,9 @@
 package com.wf.apiwf.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 
 @Getter
@@ -23,18 +21,18 @@ public class Customer {
     @Column(nullable = false, unique = true, length = 20)
     private String cnpj;
     @NotNull
-    private String razaoSocial;
+    private String companyName;
     @NotNull
-    private String nomeFantasia;
+    private String tradingName;
     @NotNull
     private String email;
    @OneToOne
    @JoinColumn(name = "id_user")
    private SystemUser user;
 
-    public Customer(String razaoSocial, String nomeFantasia, String email, SystemUser user, String cnpj) {
-        this.razaoSocial = razaoSocial;
-        this.nomeFantasia = nomeFantasia;
+    public Customer(String companyName, String tradingName, String email, SystemUser user, String cnpj) {
+        this.companyName = companyName;
+        this.tradingName = tradingName;
         this.email = email;
         this.user = user;
         this.cnpj = cnpj;

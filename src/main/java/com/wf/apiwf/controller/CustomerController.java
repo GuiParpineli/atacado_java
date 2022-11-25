@@ -26,12 +26,12 @@ public class CustomerController {
     public ResponseEntity findAll() { return customerService.getAll();}
 
     @GetMapping
-    public ResponseEntity<?> findById(@PathParam("id") Long id) throws ResourceNotFoundException {
+    public ResponseEntity<?> findCustomerById(@PathParam("id") Long id) throws ResourceNotFoundException {
         return customerService.get(id);
     }
 
     @PostMapping("/adicionar")
-    public ResponseEntity addClient(@RequestBody Customer customer) throws ResourceNotFoundException {
+    public ResponseEntity addCustomer(@RequestBody Customer customer) throws ResourceNotFoundException {
         Customer c;
         try {
             c = customerService.save(customer);
@@ -42,12 +42,12 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete")
-    public void deletarCliente(@PathVariable("id") Long id) {
+    public void deleteCustomer(@PathVariable("id") Long id) {
         customerService.delete(id);
     }
 
     @PutMapping("/atualizar")
-    public void atualizarCliente(@RequestBody Customer customer) {
+    public void updateCustomer(@RequestBody Customer customer) {
         customerService.update(customer);
     }
 }

@@ -42,12 +42,12 @@ public class CustomerService implements IService<Customer> {
     public ResponseEntity<?> get(Long id) throws ResourceNotFoundException {
         Customer saved = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No customers with the given id"));
-        return new ResponseEntity(saved, HttpStatus.OK);
+        return new ResponseEntity<>(saved, HttpStatus.OK);
     }
 
     @Override
     public Customer save(Customer customer) {
-        log.info("customer: " + customer.getRazaoSocial() + " saved successfully");
+        log.info("customer: " + customer.getCompanyName() + " saved successfully");
         return customerRepository.save(customer);
     }
 
@@ -68,8 +68,8 @@ public class CustomerService implements IService<Customer> {
         }
     }
 
-    public List<Customer> findByRazaoSocialOrNomeFantasia(String name) {
-        return customerRepository.findByRazaoSocial(name);
+    public List<Customer> findByCompanyName(String name) {
+        return customerRepository.findByCompanyName(name);
     }
 
 }

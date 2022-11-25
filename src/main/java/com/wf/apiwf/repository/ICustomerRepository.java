@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
-    List<Customer> findByRazaoSocial(String razaoSocial);
+    List<Customer> findByCompanyName(String razaoSocial);
 
     Optional<Customer> findByCnpj(String cnpj);
 
