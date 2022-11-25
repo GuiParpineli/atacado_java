@@ -39,9 +39,7 @@ public class CustomerService implements IService<Customer> {
         List<CustomerDTO> customerDTOList = new ArrayList<>();
         List<Customer> customerList = customerRepository.findAll();
         customerList.forEach(
-                c -> customerDTOList.add(
-                        mapper.convertValue(c, CustomerDTO.class)
-                ));
+                c -> customerDTOList.add( mapper.convertValue(c, CustomerDTO.class) ));
         return customerList.isEmpty() ?
                 new ResponseEntity<>("No customers registered", HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(customerDTOList);
@@ -59,9 +57,8 @@ public class CustomerService implements IService<Customer> {
         log.info("customer: " + customer.getCompanyName() + " saved successfully");
         Customer saved;
 
-        try {saved = customerRepository.save(customer);} catch (Exception e) {
-            throw new ResourceNotFoundException("Error, customer not registered");
-        }
+        try {saved = customerRepository.save(customer);}
+        catch (Exception e) { throw new ResourceNotFoundException("Error, customer not registered"); }
         userRepository.save(
                 SystemUser.builder()
                         .name(customer.getCompanyName())

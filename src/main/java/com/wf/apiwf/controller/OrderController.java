@@ -11,34 +11,30 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
-
-
     private final OrderService service;
+    private static final Logger log = Logger.getLogger(OrderController.class);
 
     @Autowired
     public OrderController(OrderService service) {this.service = service;}
 
-    private static final Logger log = Logger.getLogger(OrderController.class);
-
-    @GetMapping(value = "pedidos", produces = "application/json")
+    @GetMapping
     public ResponseEntity<?> findAllOrders() {return service.getAll();}
 
-    @GetMapping(value = "pedido/{id}")
+    @GetMapping(value = "findById")
     public ResponseEntity<?> findOrderById(@RequestParam Long id) throws ResourceNotFoundException {
         return service.get(id);
     }
 
-    @PostMapping("pedido/cadastrar")
+    @PostMapping("cadastrar")
     public ResponseEntity<?> registerOrder(@RequestBody PurchaseOrder purchasePurchaseOrder) throws ResourceNotFoundException {
         return service.save(purchasePurchaseOrder);
     }
 
-
-    @DeleteMapping("/pedido/delete/{id}")
+    @DeleteMapping("delete")
     public void deleteOrder(@RequestParam Long id) {service.delete(id);}
 
-    @PutMapping("/pedido/atualizar")
-    public void atualizarPedido(@RequestBody PurchaseOrder purchasePurchaseOrder) { service.update(purchasePurchaseOrder); }
+    @PutMapping("update")
+    public void updateOrder(@RequestBody PurchaseOrder purchasePurchaseOrder) {service.update(purchasePurchaseOrder);}
 }

@@ -14,14 +14,10 @@ import java.util.List;
 
 @Service
 public class OrderService implements IService<PurchaseOrder> {
-
-
     private final IOrderRepository repository;
-
-    @Autowired
-    public OrderService(IOrderRepository repository) { this.repository = repository; }
-
     final static Logger log = Logger.getLogger(OrderService.class);
+    @Autowired
+    public OrderService(IOrderRepository repository) {this.repository = repository;}
 
     @Override
     public ResponseEntity<?> getAll() {
@@ -39,9 +35,7 @@ public class OrderService implements IService<PurchaseOrder> {
     @Override
     public ResponseEntity<?> save(PurchaseOrder purchasePurchaseOrder) throws ResourceNotFoundException {
         PurchaseOrder saved;
-        try {
-            saved = repository.save(purchasePurchaseOrder);
-        } catch (Exception e) {
+        try {saved = repository.save(purchasePurchaseOrder);} catch (Exception e) {
             throw new ResourceNotFoundException("Error, order not saved");
         }
         return ResponseEntity.ok(saved);
@@ -49,20 +43,21 @@ public class OrderService implements IService<PurchaseOrder> {
 
     @Override
     public ResponseEntity<?> delete(Long id) {
-        if (repository.findById(id).isPresent()) {
-            repository.deleteById(id);
-            log.info("Pedido excluido");
-        }
-        return null;
+        if (repository.findById(id).isEmpty())
+            return new ResponseEntity<>("Error, order not found", HttpStatus.NOT_FOUND);
+
+        repository.deleteById(id);
+        log.info("Order deleted");
+        return ResponseEntity.ok("Successfully deleted");
     }
 
     @Override
     public ResponseEntity<String> update(PurchaseOrder purchasePurchaseOrder) {
         if (purchasePurchaseOrder != null && repository.findById(purchasePurchaseOrder.getId()).isPresent()) {
             repository.saveAndFlush(purchasePurchaseOrder);
-            log.info("Pedido Alterado");
+            log.info("Order updated");
         }
-        return null;
+        return ResponseEntity.ok("Order updated");
     }
 
 }
