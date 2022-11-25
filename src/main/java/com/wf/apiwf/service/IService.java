@@ -1,13 +1,13 @@
 package com.wf.apiwf.service;
 
-import java.util.List;
-import java.util.Optional;
+import com.wf.apiwf.exceptions.ResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
 
 public  interface IService<T>{
 
-    public List<T> getAll();
+    public ResponseEntity getAll();
 
-    public Optional<T> get(Long id);
+    public ResponseEntity<?> get(Long id) throws ResourceNotFoundException;
 
     public  T save(T t);
 

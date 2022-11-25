@@ -5,10 +5,8 @@ import com.wf.apiwf.repository.IVendorRepository;
 import com.wf.apiwf.service.IService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VendorService implements IService<Vendor> {
@@ -22,12 +20,12 @@ public class VendorService implements IService<Vendor> {
 
 
     @Override
-    public List<Vendor> getAll() {
+    public ResponseEntity getAll() {
         return vendorRepository.findAll();
     }
 
     @Override
-    public Optional<Vendor> get(Long id) {
+    public ResponseEntity<?> get(Long id) {
         return vendorRepository.findById(id);
     }
 

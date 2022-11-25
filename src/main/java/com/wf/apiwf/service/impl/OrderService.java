@@ -5,10 +5,8 @@ import com.wf.apiwf.repository.IOrderRepository;
 import com.wf.apiwf.service.IService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService implements IService<PurchaseOrder> {
@@ -23,12 +21,12 @@ public class OrderService implements IService<PurchaseOrder> {
 
 
     @Override
-    public List<PurchaseOrder> getAll() {
+    public ResponseEntity getAll() {
         return purchaseOrderRepository.findAll();
     }
 
     @Override
-    public Optional<PurchaseOrder> get(Long id) {
+    public ResponseEntity<?> get(Long id) {
         return purchaseOrderRepository.findById(id);
     }
 
