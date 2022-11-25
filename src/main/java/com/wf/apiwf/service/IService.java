@@ -9,7 +9,7 @@ public  interface IService<T>{
 
     public ResponseEntity<?> get(Long id) throws ResourceNotFoundException;
 
-    public  T save(T t);
+    public ResponseEntity<?> save(T t) throws ResourceNotFoundException;
 
     public void delete(Long id);
 

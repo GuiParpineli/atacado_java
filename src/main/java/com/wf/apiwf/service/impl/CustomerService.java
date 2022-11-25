@@ -42,13 +42,19 @@ public class CustomerService implements IService<Customer> {
     public ResponseEntity<?> get(Long id) throws ResourceNotFoundException {
         Customer saved = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No customers with the given id"));
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+        return ResponseEntity.ok(saved);
     }
 
     @Override
-    public Customer save(Customer customer) {
+    public ResponseEntity<?> save(Customer customer) throws ResourceNotFoundException {
         log.info("customer: " + customer.getCompanyName() + " saved successfully");
-        return customerRepository.save(customer);
+        Customer c;
+        try {
+            c = customerRepository.save(customer);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Error, customer not registered");
+        }
+        return ResponseEntity.ok(c);
     }
 
     @Override

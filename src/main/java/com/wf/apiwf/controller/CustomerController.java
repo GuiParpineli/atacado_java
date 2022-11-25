@@ -23,7 +23,7 @@ public class CustomerController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity findAll() { return customerService.getAll();}
+    public ResponseEntity<?> findAll() {return customerService.getAll();}
 
     @GetMapping
     public ResponseEntity<?> findCustomerById(@PathParam("id") Long id) throws ResourceNotFoundException {
@@ -31,14 +31,8 @@ public class CustomerController {
     }
 
     @PostMapping("/adicionar")
-    public ResponseEntity addCustomer(@RequestBody Customer customer) throws ResourceNotFoundException {
-        Customer c;
-        try {
-            c = customerService.save(customer);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("nao Cadastrado");
-        }
-        return ResponseEntity.ok("Salvo com sucesso!");
+    public ResponseEntity<?> addCustomer(@RequestBody Customer customer) throws ResourceNotFoundException {
+        return customerService.save(customer);
     }
 
     @DeleteMapping("/delete")

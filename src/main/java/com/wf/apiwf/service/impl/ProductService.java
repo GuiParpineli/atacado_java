@@ -28,7 +28,7 @@ public class ProductService implements IService<Product> {
     }
 
     @Override
-    public Product save(Product product) {
+    public ResponseEntity<?> save(Product product) {
         if(product != null){
             log.info("Produto : " + product.getName() + " salvo com sucesso!");
             return productRepository.save(product);

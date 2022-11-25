@@ -31,7 +31,7 @@ public class OrderService implements IService<PurchaseOrder> {
     }
 
     @Override
-    public PurchaseOrder save(PurchaseOrder purchasePurchaseOrder) {
+    public ResponseEntity<?> save(PurchaseOrder purchasePurchaseOrder) {
         if (purchasePurchaseOrder != null) {
             log.info("Efetuando pedido");
             return purchaseOrderRepository.save(purchasePurchaseOrder);

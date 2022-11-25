@@ -30,7 +30,7 @@ public class VendorService implements IService<Vendor> {
     }
 
     @Override
-    public Vendor save(Vendor vendor) {
+    public ResponseEntity<?> save(Vendor vendor) {
         if (vendor != null) {
             log.info("Vendedor: " + vendor.getName() + " salvo com sucesso!");
             return vendorRepository.save(vendor);
