@@ -2,9 +2,12 @@ package com.wf.apiwf.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wf.apiwf.entity.Customer;
+import com.wf.apiwf.entity.SystemUser;
 import com.wf.apiwf.entity.dto.CustomerDTO;
 import com.wf.apiwf.exceptions.ResourceNotFoundException;
 import com.wf.apiwf.repository.ICustomerRepository;
+import com.wf.apiwf.repository.IUserRepository;
+import com.wf.apiwf.security.SystemUserRoles;
 import com.wf.apiwf.service.IService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +17,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService implements IService<Customer> {
 
     private final ICustomerRepository customerRepository;
+    private final IUserRepository userRepository;
     private final ObjectMapper mapper = new ObjectMapper();
 
     final static Logger log = Logger.getLogger(CustomerService.class);
 
     @Autowired
-    public CustomerService(ICustomerRepository customerRepository) {
+    public CustomerService(ICustomerRepository customerRepository, IUserRepository userRepository) {
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -53,28 +59,54 @@ public class CustomerService implements IService<Customer> {
         log.info("customer: " + customer.getCompanyName() + " saved successfully");
         Customer saved;
 
-        try { saved = customerRepository.save(customer); }
-        catch (Exception e) { throw new ResourceNotFoundException("Error, customer not registered"); }
-        return ResponseEntity.ok(saved);
+        try {saved = customerRepository.save(customer);} catch (Exception e) {
+            throw new ResourceNotFoundException("Error, customer not registered");
+        }
+        userRepository.save(
+                SystemUser.builder()
+                        .name(customer.getCompanyName())
+                        .username(customer.getTradingName())
+                        .email(customer.getEmail())
+                        .password(customer.getPassword)
+                        .systemUserRoles(SystemUserRoles.ROLE_CLIENT)
+                        .build()
+        );
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<?> delete(Long id) {
-        if (customerRepository.findById(id).isEmpty()) {
-            return new ResponseEntity<>("Order not found for deleting", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> delete(Long id) throws ResourceNotFoundException {
+        Optional<Customer> saved = customerRepository.findById(id);
+        if (saved.isEmpty()) {
+            return new ResponseEntity<>("Customer not found for deleting", HttpStatus.NOT_FOUND);
         }
         log.info("Customer deleted successfully!");
         customerRepository.deleteById(id);
-        return new ResponseEntity<>("Saved successfully", HttpStatus.OK);
+        userRepository.deleteById(
+                userRepository.findByUsername(
+                        saved.get().getTradingName()).get().getId()
+        );
+        return new ResponseEntity<>(" Successfully deleted", HttpStatus.OK);
     }
 
     @Override
-    public void update(Customer customer) {
-        if (customer != null && customerRepository.findById(customer.getId()).isPresent()) {
-            customerRepository.saveAndFlush(customer);
-            log.info("Updated customer");
-        }
+    public ResponseEntity<String> update(Customer customer) {
+        if (customerRepository.findById(customer.getId()).isEmpty())
+            return new ResponseEntity<>("Customer does not exist", HttpStatus.BAD_REQUEST);
+        customerRepository.saveAndFlush(customer);
+        userRepository.saveAndFlush(
+                SystemUser.builder()
+                        .name(customer.getCompanyName())
+                        .username(customer.getTradingName())
+                        .email(customer.getEmail())
+                        .password(customer.getPassword)
+                        .systemUserRoles(SystemUserRoles.ROLE_CLIENT)
+                        .build()
+        );
+        log.info("Updated customer");
+        return ResponseEntity.ok("Updated");
     }
+
 
     public List<Customer> findByCompanyName(String name) {
         return customerRepository.findByCompanyName(name);

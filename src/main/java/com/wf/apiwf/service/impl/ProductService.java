@@ -46,10 +46,11 @@ public class ProductService implements IService<Product> {
     }
 
     @Override
-    public void update(Product product) {
+    public ResponseEntity<String> update(Product product) {
         if(product != null && productRepository.findById(product.getId()).isPresent()){
             productRepository.saveAndFlush(product);
             log.info("Produto atualizado com sucesso");
         }
+        return null;
     }
 }

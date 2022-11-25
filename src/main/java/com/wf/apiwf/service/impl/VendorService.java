@@ -49,11 +49,12 @@ public class VendorService implements IService<Vendor> {
     }
 
     @Override
-    public void update(Vendor vendor) {
+    public ResponseEntity<String> update(Vendor vendor) {
         if (vendor != null && vendorRepository.findById(vendor.getId()).isPresent()) {
             vendorRepository.saveAndFlush(vendor);
             log.info("Vendedor cadastrado!");
         }
+        return null;
     }
 
 }

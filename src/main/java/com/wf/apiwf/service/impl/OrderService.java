@@ -57,11 +57,12 @@ public class OrderService implements IService<PurchaseOrder> {
     }
 
     @Override
-    public void update(PurchaseOrder purchasePurchaseOrder) {
+    public ResponseEntity<String> update(PurchaseOrder purchasePurchaseOrder) {
         if (purchasePurchaseOrder != null && repository.findById(purchasePurchaseOrder.getId()).isPresent()) {
             repository.saveAndFlush(purchasePurchaseOrder);
             log.info("Pedido Alterado");
         }
+        return null;
     }
 
 }
