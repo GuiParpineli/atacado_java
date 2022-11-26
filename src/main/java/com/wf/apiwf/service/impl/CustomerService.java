@@ -25,9 +25,7 @@ public class CustomerService implements IService<Customer> {
     private final ICustomerRepository customerRepository;
     private final IUserRepository userRepository;
     private final ObjectMapper mapper = new ObjectMapper();
-
     final static Logger log = Logger.getLogger(CustomerService.class);
-
     @Autowired
     public CustomerService(ICustomerRepository customerRepository, IUserRepository userRepository) {
         this.customerRepository = customerRepository;

@@ -21,10 +21,8 @@ public class ProductService implements IService<Product> {
     private final IProductRepository repository;
     final static Logger log = Logger.getLogger(Product.class);
     private final ObjectMapper mapper = new ObjectMapper();
-
     @Autowired
     public ProductService(IProductRepository repository) {this.repository = repository;}
-
 
     @Override
     public ResponseEntity<?> getAll() {
@@ -58,7 +56,7 @@ public class ProductService implements IService<Product> {
     public ResponseEntity<?> delete(Long id) {
         if (repository.findById(id).isPresent()) {
             repository.deleteById(id);
-            log.info("Produto deletado");
+            log.info("Product deleted successfully");
         }
         return null;
     }
@@ -67,7 +65,7 @@ public class ProductService implements IService<Product> {
     public ResponseEntity<String> update(Product product) {
         if (product != null && repository.findById(product.getId()).isPresent()) {
             repository.saveAndFlush(product);
-            log.info("Produto atualizado com sucesso");
+            log.info("Product updated successfully");
         }
         return null;
     }
