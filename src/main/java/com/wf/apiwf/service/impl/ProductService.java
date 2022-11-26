@@ -37,8 +37,8 @@ public class ProductService implements IService<Product> {
 
     @Override
     public ResponseEntity<?> get(Long id) throws ResourceNotFoundException {
-        Product saved = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("None Products with " +
-                "id informed founded"));
+        Product saved = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("None Products with id informed founded"));
         ProductDTO dto = mapper.convertValue(saved, ProductDTO.class);
         return ResponseEntity.ok(dto);
     }
