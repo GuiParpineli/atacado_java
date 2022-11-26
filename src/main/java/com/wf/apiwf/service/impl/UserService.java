@@ -14,11 +14,10 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     private final IUserRepository repository;
+    final static Logger log = Logger.getLogger(UserService.class);
 
     @Autowired
     public UserService(IUserRepository repository) {this.repository = repository;}
-
-    final static Logger log = Logger.getLogger(UserService.class);
 
     public List<SystemUser> getAll() {
         return repository.findAll();
@@ -32,7 +31,6 @@ public class UserService implements UserDetailsService {
         log.info("Usuario salvo com sucesso");
         return repository.save(systemUser);
     }
-
 
     public void delete(Long id) {
         if (repository.findById(id).isPresent()) {
@@ -53,7 +51,7 @@ public class UserService implements UserDetailsService {
                 "encontrado"));
     }
 
-    public List<SystemUser> findByName(String name){
-        return  repository.findByName(name);
+    public List<SystemUser> findByName(String name) {
+        return repository.findByName(name);
     }
 }

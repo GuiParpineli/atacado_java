@@ -52,7 +52,7 @@ public class SecurityConfiguration {
                 .antMatchers("/v3/api-docs/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/user/authenticate").permitAll()
+                .antMatchers("/user/login").permitAll()
                 .antMatchers("/produto/**").hasAnyRole("ADMIN","VENDOR")
                 .anyRequest().authenticated()
                 .and()

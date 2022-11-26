@@ -30,11 +30,8 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService service;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtUtil jwtUtil;
-
     private static final Logger log = Logger.getLogger(UserController.class);
 
     @Autowired
@@ -45,7 +42,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<?> createAuthenticaitionToken(@RequestBody SystemUser systemUser) throws Exception {
         try {
             log.info("tentando efetuar login try " + systemUser.getUsername());

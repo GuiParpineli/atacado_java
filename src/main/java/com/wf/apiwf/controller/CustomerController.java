@@ -36,7 +36,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteCustomer(@PathVariable("id") Long id) {
+    public void deleteCustomer(@PathVariable("id") Long id) throws ResourceNotFoundException {
         customerService.delete(id);
     }
 

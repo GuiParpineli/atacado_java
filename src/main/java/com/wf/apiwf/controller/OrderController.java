@@ -27,7 +27,7 @@ public class OrderController {
         return service.get(id);
     }
 
-    @PostMapping("cadastrar")
+    @PostMapping("register")
     public ResponseEntity<?> registerOrder(@RequestBody PurchaseOrder purchasePurchaseOrder) throws ResourceNotFoundException {
         return service.save(purchasePurchaseOrder);
     }

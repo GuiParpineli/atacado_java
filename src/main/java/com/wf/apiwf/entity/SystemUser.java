@@ -35,7 +35,7 @@ public class SystemUser implements UserDetails {
     private String email;
 
     @Column(nullable = false, unique = true)
-    @Size(min = 4, max = 8)
+    @Size(min = 4)
     private String username;
 
     @NotEmpty

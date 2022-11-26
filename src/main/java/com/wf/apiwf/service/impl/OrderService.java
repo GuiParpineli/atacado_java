@@ -1,5 +1,6 @@
 package com.wf.apiwf.service.impl;
 
+import com.wf.apiwf.entity.OrderStatus;
 import com.wf.apiwf.entity.PurchaseOrder;
 import com.wf.apiwf.exceptions.ResourceNotFoundException;
 import com.wf.apiwf.repository.IOrderRepository;
@@ -9,13 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import state.IOrderState;
 
 import java.util.List;
 
 @Service
-public class OrderService implements IService<PurchaseOrder> {
+public class OrderService implements IService<PurchaseOrder>, IOrderState {
     private final IOrderRepository repository;
     final static Logger log = Logger.getLogger(OrderService.class);
+
     @Autowired
     public OrderService(IOrderRepository repository) {this.repository = repository;}
 
@@ -53,11 +56,32 @@ public class OrderService implements IService<PurchaseOrder> {
 
     @Override
     public ResponseEntity<String> update(PurchaseOrder purchasePurchaseOrder) {
-        if (purchasePurchaseOrder != null && repository.findById(purchasePurchaseOrder.getId()).isPresent()) {
-            repository.saveAndFlush(purchasePurchaseOrder);
-            log.info("Order updated");
+        if (purchasePurchaseOrder.getStatus().equals(OrderStatus.OPEN)) {
+            if (repository.findById(purchasePurchaseOrder.getId()).isPresent()) {
+                repository.saveAndFlush(purchasePurchaseOrder);
+                log.info("Order updated");
+            }
         }
         return ResponseEntity.ok("Order updated");
     }
 
+    @Override
+    public void previousStatus() {
+
+    }
+
+    @Override
+    public void nextStatus() {
+
+    }
+
+    @Override
+    public void issueOrder() {
+
+    }
+
+    @Override
+    public void finishOrder() {
+
+    }
 }

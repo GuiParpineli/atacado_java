@@ -39,8 +39,8 @@ public class CustomerService implements IService<Customer> {
         List<CustomerDTO> customerDTOList = new ArrayList<>();
         List<Customer> customerList = customerRepository.findAll();
         customerList.forEach(
-                c -> customerDTOList.add( mapper.convertValue(c, CustomerDTO.class) ));
-        return customerList.isEmpty() ?
+                c -> customerDTOList.add(mapper.convertValue(c, CustomerDTO.class)));
+        return customerDTOList.isEmpty() ?
                 new ResponseEntity<>("No customers registered", HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(customerDTOList);
     }
@@ -54,20 +54,20 @@ public class CustomerService implements IService<Customer> {
 
     @Override
     public ResponseEntity<?> save(Customer customer) throws ResourceNotFoundException {
-        log.info("customer: " + customer.getCompanyName() + " saved successfully");
-        Customer saved;
 
-        try {saved = customerRepository.save(customer);}
-        catch (Exception e) { throw new ResourceNotFoundException("Error, customer not registered"); }
+        Customer saved;
+        try {
+            saved = customerRepository.save(customer);
+            log.info("customer: " + customer.getCompanyName() + " saved successfully");
+        } catch (Exception e) {throw new ResourceNotFoundException("Error, customer not registered");}
         userRepository.save(
-                SystemUser.builder()
-                        .name(customer.getCompanyName())
-                        .username(customer.getTradingName())
-                        .email(customer.getEmail())
-                        .password(customer.getPassword)
-                        .systemUserRoles(SystemUserRoles.ROLE_CLIENT)
-                        .build()
-        );
+                new SystemUser(
+                        customer.getCompanyName(),
+                        customer.getTradingName(),
+                        customer.getEmail(),
+                        customer.getPassword(),
+                        SystemUserRoles.ROLE_CLIENT
+                ));
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
@@ -96,7 +96,7 @@ public class CustomerService implements IService<Customer> {
                         .name(customer.getCompanyName())
                         .username(customer.getTradingName())
                         .email(customer.getEmail())
-                        .password(customer.getPassword)
+                        .password(customer.password)
                         .systemUserRoles(SystemUserRoles.ROLE_CLIENT)
                         .build()
         );

@@ -35,6 +35,9 @@ public class PurchaseOrder {
     @JoinColumn(name = "id_customer")
     private Customer customer;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
     @DateTimeFormat(pattern = "dd-mm-yyyy")
     private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.YYYY HH:mm:ss"));
 }

@@ -29,16 +29,13 @@ public class Customer {
     private String email;
     @NotNull
     @Size(min = 3, max = 16)
-    public String getPassword;
-   @OneToOne
-   @JoinColumn(name = "id_user")
-   private SystemUser user;
+    public String password;
+
 
     public Customer(String companyName, String tradingName, String email, SystemUser user, String cnpj) {
         this.companyName = companyName;
         this.tradingName = tradingName;
         this.email = email;
-        this.user = user;
         this.cnpj = cnpj;
     }
 }
