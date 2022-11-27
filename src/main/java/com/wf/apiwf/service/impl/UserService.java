@@ -51,7 +51,11 @@ public class UserService implements UserDetailsService {
                 "encontrado"));
     }
 
-    public List<SystemUser> findByName(String name) {
+    public SystemUser findByName(String name) {
         return repository.findByName(name);
+    }
+
+    public  SystemUser findByEmail(String email){
+        return repository.findByEmail(email);
     }
 }

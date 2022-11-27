@@ -71,16 +71,13 @@ public class CustomerService implements IService<Customer> {
 
     @Override
     public ResponseEntity<?> delete(Long id) throws ResourceNotFoundException {
-        Optional<Customer> saved = customerRepository.findById(id);
-        if (saved.isEmpty()) {
-            return new ResponseEntity<>("Customer not found for deleting", HttpStatus.NOT_FOUND);
-        }
-        log.info("Customer deleted successfully!");
+        Customer saved = customerRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Customer not found for deleting"));
         customerRepository.deleteById(id);
         userRepository.deleteById(
                 userRepository.findByUsername(
-                        saved.get().getTradingName()).get().getId()
-        );
+                        saved.getTradingName()).get().getId());
+        log.info("Customer deleted successfully!");
         return new ResponseEntity<>(" Successfully deleted", HttpStatus.OK);
     }
 
